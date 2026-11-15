@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #1F2937;
+    background-color: #F8FAF9;
+    scroll-behavior: smooth;
+  }
+
+  /* Mode Confort : +30% taille de police, contrastes renforcés, suppression des éléments décoratifs */
+  html.comfort-mode {
+    font-size: 130%;
+  }
+
+  html.comfort-mode body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    line-height: 1.65 !important;
+  }
+
+  html.comfort-mode .comfort-card {
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    background-color: #FFFFFF !important;
+  }
+
+  html.comfort-mode .comfort-decorative {
+    display: none !important;
+  }
+
+  html.comfort-mode .text-ink-muted {
+    color: #111827 !important;
+    font-weight: 500 !important;
+  }
+
+  /* Focus accessible WCAG 2.2 AA */
+  *:focus-visible {
+    outline: 3px solid #174A73;
+    outline-offset: 2px;
+  }
+}
+
+/* Fix Leaflet z-index sous les barres de navigation collantes et modales */
+.leaflet-container {
+  z-index: 10 !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 10 !important;
+}
