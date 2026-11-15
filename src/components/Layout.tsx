@@ -50,7 +50,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface text-ink overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-surface text-ink overflow-x-clip">
       {/* Barre supérieure d'accessibilité universelle */}
       <div className="bg-secondary text-white py-2 px-4 border-b border-secondary-hover">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-sm">
