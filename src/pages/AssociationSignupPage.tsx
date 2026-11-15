@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, CheckCircle2, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { Building2, CheckCircle2, ShieldCheck, ArrowLeft, Loader2 } from 'lucide-react';
 import { CategoryId } from '../data/mockData';
 
 export const AssociationSignupPage: React.FC = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState('');
   const [rna, setRna] = useState('');
@@ -18,8 +19,12 @@ export const AssociationSignupPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!rgpdAccepted) return;
-    setSubmitted(true);
+    if (!rgpdAccepted || isSubmitting) return;
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitted(true);
+    }, 750);
   };
 
   return (
@@ -227,9 +232,17 @@ export const AssociationSignupPage: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-4 min-h-[54px] rounded-btn text-base transition-colors"
+              disabled={isSubmitting}
+              className="w-full bg-primary hover:bg-primary-hover disabled:opacity-70 text-white font-bold py-4 min-h-[54px] rounded-btn text-base transition-colors flex items-center justify-center gap-2"
             >
-              Envoyer la demande d’inscription
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Envoi de la demande en cours...</span>
+                </>
+              ) : (
+                <span>Envoyer la demande d’inscription</span>
+              )}
             </button>
           </form>
         )}

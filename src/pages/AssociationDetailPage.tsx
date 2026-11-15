@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   UserCheck,
   Building2,
+  Loader2,
 } from 'lucide-react';
 import { ASSOCIATIONS } from '../data/mockData';
 import { useAccessibility } from '../context/AccessibilityContext';
@@ -29,6 +30,7 @@ export const AssociationDetailPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [phone, setPhone] = useState('');
   const [helperName, setHelperName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
   const selectedSlot = asso.slots.find((s) => s.id === selectedSlotId);
@@ -37,8 +39,12 @@ export const AssociationDetailPage: React.FC = () => {
 
   const handleConfirmBooking = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedSlotId || !firstName.trim() || !phone.trim()) return;
-    setBookingConfirmed(true);
+    if (!selectedSlotId || !firstName.trim() || !phone.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setBookingConfirmed(true);
+    }, 750);
   };
 
   return (
@@ -305,9 +311,17 @@ export const AssociationDetailPage: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-4 min-h-[54px] rounded-btn text-base transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full bg-primary hover:bg-primary-hover disabled:opacity-70 text-white font-bold py-4 min-h-[54px] rounded-btn text-base transition-colors flex items-center justify-center gap-2"
                 >
-                  Confirmer le rendez-vous
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Enregistrement en cours...</span>
+                    </>
+                  ) : (
+                    <span>Confirmer le rendez-vous</span>
+                  )}
                 </button>
               </form>
             )}

@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   UserCheck,
   MessageSquareText,
+  Loader2,
 } from 'lucide-react';
 import { ASSOCIATIONS, Association, CategoryId, TimeSlot } from '../data/mockData';
 import { useAccessibility } from '../context/AccessibilityContext';
@@ -26,6 +27,7 @@ export const QuickBookingFlowPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [phone, setPhone] = useState('');
   const [forSomeoneElse, setForSomeoneElse] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
   const themes: { id: CategoryId; icon: React.ReactNode }[] = [
@@ -63,8 +65,12 @@ export const QuickBookingFlowPage: React.FC = () => {
 
   const handleConfirm = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!firstName.trim() || !phone.trim()) return;
-    setConfirmed(true);
+    if (!firstName.trim() || !phone.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setConfirmed(true);
+    }, 750);
   };
 
   const stepLabels = ['1. Le besoin', '2. Le lieu', '3. Le créneau', '4. La confirmation'];
@@ -290,9 +296,17 @@ export const QuickBookingFlowPage: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-4 min-h-[56px] rounded-btn text-lg transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full bg-primary hover:bg-primary-hover disabled:opacity-70 text-white font-bold py-4 min-h-[56px] rounded-btn text-lg transition-colors flex items-center justify-center gap-2"
                 >
-                  Valider mon rendez-vous
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Validation en cours...</span>
+                    </>
+                  ) : (
+                    <span>Valider mon rendez-vous</span>
+                  )}
                 </button>
               </form>
             </>
