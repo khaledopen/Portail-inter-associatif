@@ -119,8 +119,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       {/* En-tête institutionnel principal */}
       <header className="bg-white border-b border-border sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3 group">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <Link to="/" className="flex items-center gap-3 group shrink-0">
             <div className="w-12 h-12 rounded-[10px] bg-primary text-white flex items-center justify-center shrink-0">
               <Building2 className="w-7 h-7" />
             </div>
@@ -135,12 +135,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </Link>
 
           {/* Navigation Desktop */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Navigation principale">
+          <nav className="hidden lg:flex items-center gap-1 flex-wrap justify-end" aria-label="Navigation principale">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3.5 py-2.5 rounded-btn text-sm font-semibold transition-colors min-h-[44px] flex items-center ${
+                className={`px-3 py-2 rounded-btn text-sm font-semibold transition-colors min-h-[44px] flex items-center whitespace-nowrap ${
                   isActive(item.path)
                     ? 'bg-primary-light text-primary border border-primary/20'
                     : 'text-ink hover:bg-surface hover:text-secondary'

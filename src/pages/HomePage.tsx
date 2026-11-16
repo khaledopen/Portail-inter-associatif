@@ -173,7 +173,7 @@ export const HomePage: React.FC = () => {
                 </div>
 
                 <div className="pt-3 border-t border-border flex items-center justify-between text-sm font-bold text-secondary group-hover:text-primary">
-                  <span>Voir les associations</span>
+                  <span>{theme.id === 'droits' ? 'Accéder à mon espace' : 'Voir les associations'}</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>

@@ -228,7 +228,17 @@ export const DirectoryPage: React.FC = () => {
               onSelectAssociation={(id) => setSelectedAssoId(id)}
               heightClass="h-[300px] sm:h-[380px] lg:h-[460px]"
             />
-            <p className="text-xs text-ink-muted mt-3">
+            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs font-medium text-ink">
+              <div className="flex items-center gap-1.5">
+                <span className="inline-block w-3 h-3 rounded-full bg-primary shrink-0" aria-hidden="true" />
+                <span>Point vert = Association</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-block w-3 h-3 rounded-full bg-secondary shrink-0" aria-hidden="true" />
+                <span>Point bleu = Arrêt Tram/Bus TAO</span>
+              </div>
+            </div>
+            <p className="text-xs text-ink-muted mt-2">
               Cliquez sur un point vert pour afficher l’adresse et l’arrêt de Tram/Bus TAO le plus proche.
             </p>
           </div>
