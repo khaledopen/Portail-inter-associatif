@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -11,11 +11,75 @@ import {
   Line,
   Legend,
 } from 'recharts';
-import { ShieldCheck, Users, CalendarCheck, Building2, Clock, MapPin } from 'lucide-react';
+import { ShieldCheck, Users, CalendarCheck, Building2, Clock, MapPin, Lock } from 'lucide-react';
 import { ASSOCIATIONS, OBSERVATORY_STATS } from '../data/mockData';
 import { InteractiveMap } from '../components/InteractiveMap';
 
 export const AdminObservatoryPage: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminId, setAdminId] = useState('PREF45-OBS-2026');
+
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-12">
+        <div className="comfort-card bg-white rounded-card p-6 sm:p-8 border border-border shadow-card">
+          <div className="w-14 h-14 rounded-full bg-secondary-light text-secondary flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-7 h-7" />
+          </div>
+          <h1 className="font-display font-extrabold text-2xl text-secondary text-center mb-2">
+            Observatoire État
+          </h1>
+          <p className="text-sm text-ink-muted text-center mb-6">
+            Accès restreint aux services de la Préfecture du Loiret, DDETS et collectivités habilitées.
+          </p>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (adminId.trim()) setIsAuthenticated(true);
+            }}
+            className="space-y-4"
+          >
+            <div>
+              <label htmlFor="admin-id" className="block text-sm font-bold text-ink mb-1.5">
+                Identifiant professionnel
+              </label>
+              <input
+                id="admin-id"
+                type="text"
+                value={adminId}
+                onChange={(e) => setAdminId(e.target.value)}
+                placeholder="Ex : PREF45-OBS-2026"
+                className="w-full px-4 py-3 rounded-btn border border-border text-base font-medium focus:border-secondary"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-secondary hover:bg-secondary-hover text-white font-bold py-3.5 rounded-btn min-h-[48px] transition-colors"
+            >
+              Accéder à l’Observatoire
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAuthenticated(true)}
+              className="w-full bg-primary-light hover:bg-primary/15 text-primary font-bold py-3 rounded-btn min-h-[44px] text-sm transition-colors"
+            >
+              Accès rapide démonstration
+            </button>
+          </form>
+
+          <div className="mt-6 pt-4 border-t border-border flex items-center justify-center gap-2 text-xs text-ink-muted text-center">
+            <ShieldCheck className="w-4 h-4 text-secondary shrink-0" />
+            <span>Données 100 % anonymisées & agrégées • Aucune donnée nominative</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       {/* En-tête Préfecture / État */}

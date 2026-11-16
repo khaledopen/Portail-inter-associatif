@@ -16,6 +16,8 @@ import {
   ShieldCheck,
   CheckCircle2,
   Send,
+  Lock,
+  X,
 } from 'lucide-react';
 import {
   ASSOCIATIONS,
@@ -39,10 +41,74 @@ type ProSection =
   | 'settings';
 
 export const ProSpacePage: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [proId, setProId] = useState('ASSO-ORLEANS-4501');
+  const [passportModalOpen, setPassportModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<ProSection>('dashboard');
   const [orientationSent, setOrientationSent] = useState(false);
   const [urgencyMessage, setUrgencyMessage] = useState('');
   const [urgencySent, setUrgencySent] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-12">
+        <div className="comfort-card bg-white rounded-card p-6 sm:p-8 border border-border shadow-card">
+          <div className="w-14 h-14 rounded-full bg-primary-light text-primary flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-7 h-7" />
+          </div>
+          <h1 className="font-display font-extrabold text-2xl text-secondary text-center mb-2">
+            Espace Associations
+          </h1>
+          <p className="text-sm text-ink-muted text-center mb-6">
+            Accès sécurisé réservé aux référents et travailleurs sociaux habilités (conformité RGPD).
+          </p>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (proId.trim()) setIsAuthenticated(true);
+            }}
+            className="space-y-4"
+          >
+            <div>
+              <label htmlFor="pro-id" className="block text-sm font-bold text-ink mb-1.5">
+                Identifiant professionnel
+              </label>
+              <input
+                id="pro-id"
+                type="text"
+                value={proId}
+                onChange={(e) => setProId(e.target.value)}
+                placeholder="Ex : ASSO-ORLEANS-4501"
+                className="w-full px-4 py-3 rounded-btn border border-border text-base font-medium focus:border-primary"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3.5 rounded-btn min-h-[48px] transition-colors"
+            >
+              Se connecter à l’espace pro
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAuthenticated(true)}
+              className="w-full bg-secondary-light hover:bg-secondary/15 text-secondary font-bold py-3 rounded-btn min-h-[44px] text-sm transition-colors"
+            >
+              Accès rapide démonstration
+            </button>
+          </form>
+
+          <div className="mt-6 pt-4 border-t border-border flex items-center justify-center gap-2 text-xs text-ink-muted text-center">
+            <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
+            <span>Données chiffrées • Traçabilité des accès • Consentement usager requis</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const sidebarItems: { id: ProSection; label: string; icon: React.ReactNode; isUrgent?: boolean }[] = [
     { id: 'dashboard', label: 'Tableau de bord', icon: <LayoutDashboard className="w-4 h-4" /> },
@@ -164,7 +230,7 @@ export const ProSpacePage: React.FC = () => {
                             {rdv.hasPassport ? (
                               <button
                                 type="button"
-                                onClick={() => setActiveSection('passport')}
+                                onClick={() => setPassportModalOpen(true)}
                                 className="text-primary font-bold hover:underline"
                               >
                                 Voir 5 lignes clés
@@ -510,6 +576,82 @@ export const ProSpacePage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Modale Passeport de liaison (5 lignes clés) */}
+      {passportModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="passport-modal-title"
+        >
+          <div className="bg-white rounded-card max-w-lg w-full p-6 border border-border shadow-xl space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full bg-primary-light text-primary mb-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Accord usager recueilli par SMS (RGPD)</span>
+                </span>
+                <h2 id="passport-modal-title" className="font-display font-extrabold text-xl text-secondary">
+                  Passeport de liaison — 5 lignes clés
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPassportModalOpen(false)}
+                className="p-2 rounded-btn hover:bg-surface text-ink-muted"
+                aria-label="Fermer la fenêtre"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="text-xs bg-surface px-3 py-2 rounded-lg border border-border flex flex-wrap items-center justify-between gap-2">
+              <span><strong>De :</strong> Secours Populaire Orléans</span>
+              <span>→</span>
+              <span><strong>Vers :</strong> CCAS / Point Accueil Droits</span>
+            </div>
+
+            <ol className="space-y-2.5 text-sm">
+              <li className="p-2.5 rounded-lg bg-surface border border-border">
+                <span className="font-bold text-secondary">1. Situation & logement :</span> Personne isolée, hébergement temporaire en fin de prise en charge.
+              </li>
+              <li className="p-2.5 rounded-lg bg-surface border border-border">
+                <span className="font-bold text-secondary">2. Droits ouverts / en cours :</span> RSA actif, renouvellement CSS (ex-CMU-C) déposé.
+              </li>
+              <li className="p-2.5 rounded-lg bg-surface border border-border">
+                <span className="font-bold text-secondary">3. Besoins prioritaires :</span> Aide alimentaire immédiate + orientation dossier FSL.
+              </li>
+              <li className="p-2.5 rounded-lg bg-surface border border-border">
+                <span className="font-bold text-secondary">4. Pièces déjà vérifiées :</span> Pièce d’identité & attestation CAF disponibles dans le coffre-fort.
+              </li>
+              <li className="p-2.5 rounded-lg bg-surface border border-border">
+                <span className="font-bold text-secondary">5. Mobilité & accueil :</span> Accès Tram A (Arrêt De Gaulle) • Échange en français.
+              </li>
+            </ol>
+
+            <div className="pt-2 flex flex-wrap items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setPassportModalOpen(false);
+                  setActiveSection('passport');
+                }}
+                className="px-4 py-2.5 rounded-btn border border-border text-sm font-bold text-secondary hover:bg-surface"
+              >
+                Voir tous les passeports
+              </button>
+              <button
+                type="button"
+                onClick={() => setPassportModalOpen(false)}
+                className="px-4 py-2.5 rounded-btn bg-primary hover:bg-primary-hover text-white text-sm font-bold"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
