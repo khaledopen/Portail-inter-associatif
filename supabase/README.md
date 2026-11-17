@@ -89,7 +89,7 @@ Le script `tests/inclusion_rgpd.sql` vérifie ces règles et annule ses écritur
 
 Prérequis côté Supabase :
 - dans **Authentication → URL Configuration**, l’URL du site et les URL de redirection doivent inclure l’adresse du portail, par exemple `http://localhost:5173/**` et l’adresse Vercel ;
-- le service d’e-mail intégré n’envoie qu’aux membres de l’organisation Supabase. Pour inviter n’importe quelle association, configure un serveur SMTP dans **Authentication → Emails → SMTP Settings** (Brevo, Resend, OVH…).
+- les e-mails partent par le SMTP Gmail du compte pilote (mot de passe d’application Google), avec les modèles français de `supabase/templates/`. Avant l’ouverture au public, passer à une adresse sur un domaine dédié (Brevo + DKIM/SPF/DMARC) pour garantir la délivrabilité.
 
 ## Vérifications
 
