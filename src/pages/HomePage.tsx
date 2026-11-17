@@ -16,7 +16,7 @@ import {
   TrainFront,
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
-import type { CategoryId } from '../data/mockData';
+import type { CategoryId } from '../data/types';
 import { usePortal } from '../context/PortalContext';
 
 export const HomePage: React.FC = () => {

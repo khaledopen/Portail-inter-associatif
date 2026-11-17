@@ -9,7 +9,7 @@ import {
   ArrowRight,
   Filter,
 } from 'lucide-react';
-import type { CategoryId } from '../data/mockData';
+import type { CategoryId } from '../data/types';
 import { usePortal } from '../context/PortalContext';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { InteractiveMap } from '../components/InteractiveMap';

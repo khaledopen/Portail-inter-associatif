@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import type { Association, DigitalHelpCenter, TimeSlot } from '../data/mockData';
+import type { Association, DigitalHelpCenter, TimeSlot } from '../data/types';
 import { rpc, supabase } from '../data/portal';
 
 type DirectoryRow = Partial<Omit<Association, 'slots'>> & Pick<Association, 'id' | 'name' | 'category' | 'lat' | 'lng'> & {

@@ -1,4 +1,4 @@
-import type { CategoryId } from './mockData';
+import type { CategoryId } from './types';
 
 interface AssociationApplication {
   name: string;

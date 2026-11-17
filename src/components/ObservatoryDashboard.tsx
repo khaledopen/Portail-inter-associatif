@@ -3,9 +3,9 @@ import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
 import {
-  Activity, AlertTriangle, ArrowRight, Building2, CalendarCheck, CheckCircle2, Clock, Gauge, HandHelping, Inbox, MapPin, Shuffle,
+  Activity, ArrowRight, Building2, CalendarCheck, CheckCircle2, Clock, Gauge, HandHelping, Inbox, MapPin, Shuffle,
 } from 'lucide-react';
-import type { CategoryId } from '../data/mockData';
+import type { CategoryId } from '../data/types';
 import { rpc } from '../data/portal';
 
 // Couleurs : une teinte pour les grandeurs, palette catégorielle validée (ordre fixe) pour les identités.
@@ -34,42 +34,6 @@ const themes: Record<CategoryId, string> = {
 const monthLabel = new Intl.DateTimeFormat('fr-FR', { month: 'short', year: '2-digit' });
 const formatMonth = (value: string) => monthLabel.format(new Date(`${value}-01T12:00:00`));
 const fr = new Intl.NumberFormat('fr-FR');
-
-// Exemple affiché uniquement à la demande, toujours signalé comme fictif.
-const SAMPLE: { stats: Stats; detail: Observatory } = {
-  stats: {
-    total: 482, completed: 351, waitDays: 4.6, saturation: 78.4,
-    themes: [
-      { theme: 'logement', volume: 131 }, { theme: 'papiers', volume: 104 }, { theme: 'sante', volume: 86 },
-      { theme: 'famille', volume: 72 }, { theme: 'travail', volume: 51 }, { theme: 'droits', volume: 38 },
-    ],
-    districts: [],
-  },
-  detail: {
-    threshold: 5,
-    residentDistricts: [
-      { district: 'La Source', qpv: true, volume: 96 }, { district: 'Argonne', qpv: true, volume: 81 },
-      { district: 'Blossières', qpv: true, volume: 54 }, { district: 'Centre-ville', qpv: false, volume: 63 },
-      { district: 'Saint-Marceau', qpv: false, volume: 37 }, { district: 'Fleury-les-Aubrais', qpv: false, volume: 29 },
-    ],
-    waitByTheme: [
-      { theme: 'papiers', volume: 104, waitDays: 8.2 }, { theme: 'logement', volume: 131, waitDays: 5.1 },
-      { theme: 'sante', volume: 86, waitDays: 4.4 }, { theme: 'travail', volume: 51, waitDays: 3.0 },
-      { theme: 'famille', volume: 72, waitDays: 2.2 }, { theme: 'droits', volume: 38, waitDays: 1.9 },
-    ],
-    monthly: [
-      { month: '2026-06', volume: 41 }, { month: '2026-07', volume: 48 }, { month: '2026-08', volume: 39 },
-      { month: '2026-09', volume: 77 }, { month: '2026-10', volume: 124 }, { month: '2026-11', volume: 153 },
-    ],
-    outcomes: { cancelled: 58, absent: 27, oriented: 64, walkIn: 41 },
-    saturationByAssociation: [
-      { association: 'Accueil droits des étrangers', slots: 40, reserved: 38, rate: 95 },
-      { association: 'Point logement solidaire', slots: 52, reserved: 44, rate: 84.6 },
-      { association: 'Maison des familles', slots: 30, reserved: 21, rate: 70 },
-      { association: 'Relais santé handicap', slots: 24, reserved: 13, rate: 54.2 },
-    ],
-  },
-};
 
 function Card({ title, subtitle, children, table }: { title: string; subtitle?: string; children: ReactNode; table?: ReactNode }) {
   return <section className="comfort-card bg-white rounded-card border border-border shadow-card p-5 flex flex-col gap-3">
@@ -158,7 +122,6 @@ function Flow({ stats, detail, published, pending }: { stats: Stats; detail?: Ob
 export function ObservatoryDashboard({ stats: realStats, published, pending }: { stats: Stats; published: number; pending: number }) {
   const [detail, setDetail] = useState<Observatory>();
   const [error, setError] = useState('');
-  const [sample, setSample] = useState(false);
   useEffect(() => {
     let active = true;
     rpc<Observatory>('portal_observatory', { p_action: 'stats', p_data: {} })
@@ -167,8 +130,8 @@ export function ObservatoryDashboard({ stats: realStats, published, pending }: {
     return () => { active = false; };
   }, [realStats]);
 
-  const stats = sample ? SAMPLE.stats : realStats;
-  const data = sample ? SAMPLE.detail : detail;
+  const stats = realStats;
+  const data = detail;
   const threshold = data?.threshold ?? 5;
   const themeSeries = [...stats.themes].sort((a, b) => b.volume - a.volume).map((item) => ({ ...item, name: themes[item.theme] ?? item.theme }));
   const waitSeries = [...(data?.waitByTheme ?? [])].sort((a, b) => b.waitDays - a.waitDays).map((item) => ({ ...item, name: themes[item.theme] ?? item.theme }));
@@ -183,16 +146,8 @@ export function ObservatoryDashboard({ stats: realStats, published, pending }: {
         <h2 className="font-display font-extrabold text-2xl text-secondary">Baromètre territorial</h2>
         <p className="text-sm text-ink-muted">Statistiques 100 % anonymisées · groupes de moins de {threshold} demandes masqués</p>
       </div>
-      <label className="flex items-center gap-2 text-sm font-semibold bg-beige rounded-btn px-3 py-2 min-h-[44px] cursor-pointer">
-        <input type="checkbox" checked={sample} onChange={(event) => setSample(event.target.checked)} />
-        Afficher un exemple (données fictives)
-      </label>
     </div>
-    {sample && <p role="status" className="flex items-center gap-2 rounded-btn bg-beige border border-beige-dark px-4 py-3 text-sm font-semibold">
-      <AlertTriangle className="w-5 h-5 text-urgent shrink-0" aria-hidden="true" />
-      Exemple de démonstration : ces chiffres sont inventés et ne décrivent pas le territoire.
-    </p>}
-    {error && !sample && <p role="alert" className="text-urgent font-semibold">{error}</p>}
+    {error && <p role="alert" className="text-urgent font-semibold">{error}</p>}
 
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
       <Kpi accent icon={<Activity className="w-4 h-4" />} label="Demandes de rendez-vous" value={stats.total} hint="Depuis l’ouverture du portail" />
@@ -201,11 +156,11 @@ export function ObservatoryDashboard({ stats: realStats, published, pending }: {
       <Kpi icon={<Gauge className="w-4 h-4" />} label="Saturation à 30 jours" value={stats.saturation} unit="%" hint="Part des créneaux déjà réservés" />
       <Kpi icon={<Shuffle className="w-4 h-4" />} label="Orientations" value={data?.outcomes.oriented} hint="Rendez-vous pris par une autre association" />
       <Kpi icon={<HandHelping className="w-4 h-4" />} label="Réservations au guichet" value={data?.outcomes.walkIn} hint="Pour des personnes sans compte" />
-      <Kpi icon={<Building2 className="w-4 h-4" />} label="Associations publiées" value={sample ? 18 : published} hint="Visibles dans l’annuaire" />
-      <Kpi icon={<Inbox className="w-4 h-4" />} label="Référencements en attente" value={sample ? 3 : pending} hint="À valider ci-dessous" />
+      <Kpi icon={<Building2 className="w-4 h-4" />} label="Associations publiées" value={published} hint="Visibles dans l’annuaire" />
+      <Kpi icon={<Inbox className="w-4 h-4" />} label="Référencements en attente" value={pending} hint="À valider ci-dessous" />
     </div>
 
-    <Flow stats={stats} detail={data} published={sample ? 18 : published} pending={sample ? 3 : pending} />
+    <Flow stats={stats} detail={data} published={published} pending={pending} />
 
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
       <Card title="Évolution des demandes" subtitle="Rendez-vous pris par mois, sur 12 mois"

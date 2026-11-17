@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { usePortal } from '../context/PortalContext';
 import { ActionForm, AssociationSelect, DistrictField, field, normalizePhone, panel, PrivateArea, TextBox, Value } from '../components/PortalForms';
 import { dateLabel, operation, statusLabel } from '../data/portal';
-import type { CategoryId } from '../data/mockData';
+import type { CategoryId } from '../data/types';
 import { type MessageThread, Threads, useDashboard } from './UserSpacePage';
 
 interface StaffDashboard {
