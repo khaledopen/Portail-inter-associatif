@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { Association, DigitalHelpCenter } from '../data/mockData';
+import { Association, DigitalHelpCenter } from '../data/types';
 
 interface InteractiveMapProps {
   associations?: Association[];

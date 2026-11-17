@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ObservatoryDashboard } from '../components/ObservatoryDashboard';
 import { ActionForm, field, panel, PrivateArea, TextBox, Value } from '../components/PortalForms';
 import { usePortal } from '../context/PortalContext';
-import type { Association, CategoryId, DigitalHelpCenter } from '../data/mockData';
+import type { Association, CategoryId, DigitalHelpCenter } from '../data/types';
 import { dateLabel, inviteStaff, operation, rpc } from '../data/portal';
 import { useDashboard } from './UserSpacePage';
 

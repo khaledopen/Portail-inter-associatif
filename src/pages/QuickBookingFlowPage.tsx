@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { usePortal } from '../context/PortalContext';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { BookingForm, button, field, panel } from '../components/PortalForms';
-import type { Association, CategoryId, TimeSlot } from '../data/mockData';
+import type { Association, CategoryId, TimeSlot } from '../data/types';
 
 const categories: CategoryId[] = ['papiers', 'logement', 'sante', 'travail', 'famille', 'droits'];
 

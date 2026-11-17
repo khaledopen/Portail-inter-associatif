@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { client, operation, welcomeUrl } from '../data/portal';
 import { usePortal } from '../context/PortalContext';
 import { useAccessibility } from '../context/AccessibilityContext';
-import type { Association, TimeSlot } from '../data/mockData';
+import type { Association, TimeSlot } from '../data/types';
 
 export const panel = 'comfort-card rounded-card border border-border bg-white p-5 space-y-3';
 export const button = 'rounded-btn bg-primary text-white font-bold px-4 py-2 min-h-[44px] disabled:opacity-60';

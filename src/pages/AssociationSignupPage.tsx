@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, CheckCircle2, ShieldCheck, ArrowLeft, Loader2 } from 'lucide-react';
-import { CategoryId } from '../data/mockData';
+import { CategoryId } from '../data/types';
 import { submitAssociationApplication } from '../data/associationApplications';
 
 export const AssociationSignupPage: React.FC = () => {

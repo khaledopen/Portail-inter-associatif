@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { InteractiveMap } from '../components/InteractiveMap';
 import { BookingForm, field, panel } from '../components/PortalForms';
 import { usePortal } from '../context/PortalContext';
-import type { Association } from '../data/mockData';
+import type { Association } from '../data/types';
 
 export function AssociationDetailPage() {
   const { id } = useParams();
