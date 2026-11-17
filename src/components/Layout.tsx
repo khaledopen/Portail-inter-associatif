@@ -16,10 +16,11 @@ import {
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { LANGUAGES } from '../data/translations';
-import { DIGITAL_HELP_CENTERS } from '../data/mockData';
+import { usePortal } from '../context/PortalContext';
 import { InteractiveMap } from './InteractiveMap';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { helpCenters, directoryStatus } = usePortal();
   const {
     language,
     setLanguage,
@@ -149,6 +150,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 {item.label}
               </Link>
             ))}
+            <Link
+              to="/inscription-association"
+              className="ml-1 px-4 py-2 rounded-btn text-sm font-bold min-h-[44px] flex items-center whitespace-nowrap bg-secondary text-white hover:bg-secondary-hover"
+            >
+              {t.navSignup}
+            </Link>
           </nav>
 
           {/* Bouton Menu Mobile */}
@@ -180,6 +187,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 {item.label}
               </Link>
             ))}
+            <Link
+              to="/inscription-association"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-3 rounded-btn text-base font-bold min-h-[48px] bg-secondary text-white"
+            >
+              {t.navSignup}
+            </Link>
           </nav>
         )}
       </header>
@@ -225,7 +239,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 <span>Langage FALC & Accessibilité WCAG 2.2 AA</span>
               </p>
               <p className="text-xs text-white/70 pt-2">
-                Maquette de démonstration Frontend — Les réservations, SMS et dossiers présentés utilisent des données fictives cohérentes.
+                Les espaces personnels et professionnels nécessitent une connexion.
               </p>
             </div>
           </div>
@@ -334,11 +348,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
 
             <div className="mb-5">
-              <InteractiveMap digitalCenters={DIGITAL_HELP_CENTERS} heightClass="h-[260px]" />
+              <InteractiveMap digitalCenters={helpCenters} heightClass="h-[260px]" />
+              {directoryStatus === 'error' && <p role="alert">La liste des lieux d’aide est indisponible.</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
-              {DIGITAL_HELP_CENTERS.map((center) => (
+              {helpCenters.map((center) => (
                 <div key={center.id} className="p-3.5 rounded-btn border border-border bg-surface">
                   <div className="font-bold text-secondary text-sm mb-1">{center.name}</div>
                   <div className="text-xs text-primary font-semibold mb-2">{center.type}</div>

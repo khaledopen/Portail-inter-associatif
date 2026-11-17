@@ -9,12 +9,14 @@ import {
   ArrowRight,
   Filter,
 } from 'lucide-react';
-import { ASSOCIATIONS, CategoryId } from '../data/mockData';
+import type { CategoryId } from '../data/mockData';
+import { usePortal } from '../context/PortalContext';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { InteractiveMap } from '../components/InteractiveMap';
 
 export const DirectoryPage: React.FC = () => {
   const { t } = useAccessibility();
+  const { associations, directoryStatus } = usePortal();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCat = (searchParams.get('cat') as CategoryId | 'all') || 'all';
   const initialQ = searchParams.get('q') || '';
@@ -35,7 +37,7 @@ export const DirectoryPage: React.FC = () => {
   ];
 
   const filteredAssociations = useMemo(() => {
-    return ASSOCIATIONS.filter((asso) => {
+    return associations.filter((asso) => {
       const matchesCat =
         selectedCategory === 'all' ||
         asso.category === selectedCategory ||
@@ -49,11 +51,12 @@ export const DirectoryPage: React.FC = () => {
         asso.name.toLowerCase().includes(q) ||
         asso.mission.toLowerCase().includes(q) ||
         asso.quartier.toLowerCase().includes(q) ||
-        asso.falcSummary.toLowerCase().includes(q);
+        asso.falcSummary.toLowerCase().includes(q) ||
+        asso.procedures?.some((item) => `${item.title} ${item.description ?? ''}`.toLowerCase().includes(q));
 
       return matchesCat && matchesWeek && matchesQuery;
     });
-  }, [selectedCategory, onlyThisWeek, searchQuery]);
+  }, [associations, selectedCategory, onlyThisWeek, searchQuery]);
 
   const handleCategoryChange = (cat: CategoryId | 'all') => {
     setSelectedCategory(cat);
@@ -76,7 +79,8 @@ export const DirectoryPage: React.FC = () => {
         </p>
       </div>
 
-      {/* Barre de filtres */}
+      {directoryStatus === 'loading' && <p role="status">Chargement de l’annuaire…</p>}
+      {directoryStatus === 'error' && <p role="alert">L’annuaire est temporairement indisponible.</p>}
       <div className="comfort-card bg-white p-4 sm:p-5 rounded-card border border-border shadow-card mb-6 space-y-4">
         <div className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
@@ -164,7 +168,7 @@ export const DirectoryPage: React.FC = () => {
                 <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                   <div>
                     <span className="inline-block text-xs font-bold px-2.5 py-1 rounded-md bg-secondary-light text-secondary mb-2">
-                      {asso.quartier} • à {asso.distanceKm} km
+                      {asso.quartier}
                     </span>
                     <h2 className="font-display font-extrabold text-xl text-secondary">
                       {asso.name}

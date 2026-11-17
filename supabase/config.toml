@@ -1,0 +1,4 @@
+project_id = "portail-inter-associatif"
+
+[functions.send-portal-sms]
+verify_jwt = false

@@ -16,10 +16,12 @@ import {
   TrainFront,
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
-import { CategoryId, DIGITAL_HELP_CENTERS } from '../data/mockData';
+import type { CategoryId } from '../data/mockData';
+import { usePortal } from '../context/PortalContext';
 
 export const HomePage: React.FC = () => {
   const { t, setNearMeModalOpen } = useAccessibility();
+  const { helpCenters } = usePortal();
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -240,7 +242,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {DIGITAL_HELP_CENTERS.map((center) => (
+            {helpCenters.map((center) => (
               <div key={center.id} className="bg-white p-4 rounded-btn border border-border">
                 <div className="font-bold text-secondary mb-1">{center.name}</div>
                 <div className="text-xs font-semibold text-primary mb-2 flex items-center gap-1">

@@ -12,6 +12,20 @@ interface InteractiveMapProps {
   zoom?: number;
 }
 
+function markerPopup(title: string, ...lines: string[]) {
+  const box = document.createElement('div');
+  box.className = 'min-w-[190px] space-y-1';
+  const heading = document.createElement('strong');
+  heading.textContent = title;
+  box.append(heading);
+  for (const line of lines.filter(Boolean)) {
+    const text = document.createElement('div');
+    text.textContent = line;
+    box.append(text);
+  }
+  return box;
+}
+
 export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   associations = [],
   digitalCenters = [],
@@ -66,16 +80,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         fillOpacity: 0.95,
       });
 
-      const popupHtml = `
-        <div style="min-width:210px;font-family:Inter,sans-serif;">
-          <div style="font-weight:700;color:#174A73;font-size:14px;margin-bottom:4px;">${asso.shortName}</div>
-          <div style="font-size:12px;color:#1F2937;margin-bottom:4px;">${asso.address}, ${asso.city}</div>
-          <div style="font-size:12px;color:#176B57;font-weight:600;margin-bottom:6px;">🚊 ${asso.taoLine} — ${asso.taoStop}</div>
-          <div style="font-size:11px;color:#64748B;">${asso.hours}</div>
-        </div>
-      `;
-
-      marker.bindPopup(popupHtml);
+      marker.bindPopup(markerPopup(asso.shortName, [asso.address, asso.city].filter(Boolean).join(', '),
+        [asso.taoLine, asso.taoStop].filter(Boolean).join(' — '), asso.hours));
       marker.on('click', () => {
         if (onSelectAssociation) {
           onSelectAssociation(asso.id);
@@ -99,14 +105,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         fillOpacity: 0.95,
       });
 
-      marker.bindPopup(`
-        <div style="min-width:200px;font-family:Inter,sans-serif;">
-          <div style="font-weight:700;color:#174A73;font-size:14px;margin-bottom:4px;">${dc.name}</div>
-          <div style="font-size:12px;color:#1F2937;margin-bottom:4px;">${dc.address}</div>
-          <div style="font-size:12px;color:#176B57;font-weight:600;">🚊 ${dc.taoStop}</div>
-          <div style="font-size:12px;color:#64748B;margin-top:4px;">📞 ${dc.phone}</div>
-        </div>
-      `);
+      marker.bindPopup(markerPopup(dc.name, dc.address, dc.taoStop, dc.phone));
       marker.addTo(layer);
     });
   }, [associations, digitalCenters, selectedId, onSelectAssociation]);
