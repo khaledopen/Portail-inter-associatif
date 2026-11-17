@@ -35,7 +35,6 @@ export interface TranslationDictionary {
   emergencyBtn: string;
   helpNearMeBtn: string;
   forSomeoneElse: string;
-  heroBadge: string;
   heroTitle: string;
   heroSubtitle: string;
   searchPlaceholder: string;
@@ -82,7 +81,6 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     emergencyBtn: "Urgence Sociale (115)",
     helpNearMeBtn: "Me faire aider près de chez moi",
     forSomeoneElse: "Je prends rendez-vous pour quelqu'un d'autre",
-    heroBadge: "Service public solidaire • Gratuit & confidentiel • Orléans & Loiret (45)",
     heroTitle: "De quelle aide avez-vous besoin ?",
     heroSubtitle: "Trouvez facilement la bonne association près de chez vous, préparez vos papiers sans stress et prenez rendez-vous en quelques clics.",
     searchPlaceholder: "De quelle aide avez-vous besoin ? (ex : titre de séjour, logement, dossier MDPH, colis alimentaire...)",
@@ -151,7 +149,6 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     emergencyBtn: "Emergency (115)",
     helpNearMeBtn: "Get help in person near me",
     forSomeoneElse: "I am booking for someone else",
-    heroBadge: "Public Solidarity Service • Free & Confidential • Orléans & Loiret (45)",
     heroTitle: "What kind of help do you need?",
     heroSubtitle: "Easily find the right local association near you, check required documents and book an appointment online.",
     searchPlaceholder: "What help do you need? (e.g., residence permit, housing, disability, food aid...)",
@@ -220,7 +217,6 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     emergencyBtn: "طوارئ اجتماعية (115)",
     helpNearMeBtn: "مساعدة قريبة مني",
     forSomeoneElse: "أحجز موعداً لشخص آخر",
-    heroBadge: "خدمة تضامنية عامة • مجانية وسرية • أورليان ولواريت",
     heroTitle: "ما هي المساعدة التي تحتاجها؟",
     heroSubtitle: "اعثر بسهولة على الجمعية المناسبة بالقرب منك، تعرف على الوثائق المطلوبة واحجز موعداً عبر الإنترنت.",
     searchPlaceholder: "ما هي المساعدة التي تحتاجها؟ (تصريح إقامة، سكن، صحة، مساعدة غذائية...)",
@@ -289,7 +285,6 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     emergencyBtn: "Urgencia Social (115)",
     helpNearMeBtn: "Ayuda presencial cerca de mí",
     forSomeoneElse: "Pido cita para otra persona",
-    heroBadge: "Servicio público solidario • Gratuito y confidencial • Orléans y Loiret",
     heroTitle: "¿Qué tipo de ayuda necesita?",
     heroSubtitle: "Encuentre fácilmente la asociación adecuada cerca de su domicilio, prepare sus documentos y pida cita en línea.",
     searchPlaceholder: "¿Qué ayuda necesita? (ej: permiso de residencia, vivienda, salud, ayuda alimentaria...)",
@@ -358,7 +353,6 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     emergencyBtn: "Urgência Social (115)",
     helpNearMeBtn: "Ajuda presencial perto de mim",
     forSomeoneElse: "Estou a marcar para outra pessoa",
-    heroBadge: "Serviço público solidário • Gratuito e confidencial • Orléans e Loiret",
     heroTitle: "De que ajuda precisa?",
     heroSubtitle: "Encontre facilmente a associação certa perto de si, veja os documentos necessários e marque atendimento online.",
     searchPlaceholder: "De que ajuda precisa? (ex: título de residência, habitação, saúde, apoio alimentar...)",
@@ -427,7 +421,6 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     emergencyBtn: "Екстрена допомога (115)",
     helpNearMeBtn: "Допомога поруч зі мною",
     forSomeoneElse: "Я записую іншу людину",
-    heroBadge: "Соціальна державна служба • Безкоштовно та конфіденційно • Орлеан і Луаре",
     heroTitle: "Яка допомога вам потрібна?",
     heroSubtitle: "Знайдіть потрібну асоціацію поруч із вами, перевірте перелік документів та запишіться на прийом онлайн.",
     searchPlaceholder: "Яка допомога вам потрібна? (посвідка на проживання, житло, здоров'я, продукти...)",

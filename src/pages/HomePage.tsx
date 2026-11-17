@@ -79,10 +79,6 @@ export const HomePage: React.FC = () => {
       {/* Hero institutionnel et rassurant */}
       <section className="bg-white border-b border-border py-10 sm:py-14 px-4">
         <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-light text-primary text-sm font-semibold mb-5">
-            <span>{t.heroBadge}</span>
-          </div>
-
           <h1 className="font-display font-extrabold text-3xl sm:text-5xl text-secondary tracking-tight mb-4">
             {t.heroTitle}
           </h1>
