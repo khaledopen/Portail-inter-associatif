@@ -27,6 +27,7 @@ export interface TranslationDictionary {
   navUserSpace: string;
   navProSpace: string;
   navAdminSpace: string;
+  navSignup: string;
   comfortMode: string;
   comfortModeActive: string;
   listenPage: string;
@@ -73,6 +74,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     navUserSpace: "Mon Espace Usager",
     navProSpace: "Espace Associations",
     navAdminSpace: "Observatoire État",
+    navSignup: "Inscrire mon association",
     comfortMode: "Mode Confort (+30%)",
     comfortModeActive: "Mode Confort activé",
     listenPage: "Écouter la page",
@@ -141,6 +143,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     navUserSpace: "My User Space",
     navProSpace: "Associations Space",
     navAdminSpace: "State Observatory",
+    navSignup: "Register my association",
     comfortMode: "Comfort Mode (+30%)",
     comfortModeActive: "Comfort Mode On",
     listenPage: "Listen to page",
@@ -209,6 +212,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     navUserSpace: "فضاء المستخدم",
     navProSpace: "فضاء الجمعيات",
     navAdminSpace: "مرصد المحافظة",
+    navSignup: "تسجيل جمعيتي",
     comfortMode: "وضع القراءة المريح (+30%)",
     comfortModeActive: "الوضع المريح مفعل",
     listenPage: "الاستماع إلى الصفحة",
@@ -277,6 +281,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     navUserSpace: "Mi Espacio Usuario",
     navProSpace: "Espacio Asociaciones",
     navAdminSpace: "Observatorio",
+    navSignup: "Registrar mi asociación",
     comfortMode: "Modo Confort (+30%)",
     comfortModeActive: "Modo Confort activo",
     listenPage: "Escuchar la página",
@@ -345,6 +350,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     navUserSpace: "Espaço Utente",
     navProSpace: "Espaço Associações",
     navAdminSpace: "Observatório",
+    navSignup: "Registar a minha associação",
     comfortMode: "Modo Conforto (+30%)",
     comfortModeActive: "Modo Conforto ativo",
     listenPage: "Ouvir a página",
@@ -413,6 +419,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     navUserSpace: "Особистий кабінет",
     navProSpace: "Для асоціацій",
     navAdminSpace: "Обсерваторія",
+    navSignup: "Зареєструвати організацію",
     comfortMode: "Комфортний режим (+30%)",
     comfortModeActive: "Комфортний режим увімк.",
     listenPage: "Прослухати сторінку",
