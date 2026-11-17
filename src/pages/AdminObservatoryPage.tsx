@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { ObservatoryDashboard } from '../components/ObservatoryDashboard';
 import { ActionForm, field, panel, PrivateArea, TextBox, Value } from '../components/PortalForms';
 import { usePortal } from '../context/PortalContext';
 import type { Association, CategoryId, DigitalHelpCenter } from '../data/mockData';
@@ -81,49 +81,28 @@ type Observatory = {
 };
 const loadObservatory = () => rpc<Observatory>('portal_observatory', { p_action: 'stats', p_data: {} });
 
-function DetailedStatistics() {
+function DistrictsManager() {
   const { data, error, refresh } = useDashboard(loadObservatory);
   if (error) return <p role="alert">{error}</p>;
-  if (!data) return <p role="status">Chargement des indicateurs détaillés…</p>;
+  if (!data) return null;
   const save = async (action: string, values: Record<string, unknown>) => {
     await rpc('portal_observatory', { p_action: action, p_data: values });
     await refresh();
   };
-  const outcomes = [['Annulations', data.outcomes.cancelled], ['Absences', data.outcomes.absent],
-    ['Orientations entre structures', data.outcomes.oriented], ['Réservations au guichet', data.outcomes.walkIn]] as const;
   return <section className={panel}>
-    <h2 className="text-xl font-bold">Baromètre détaillé</h2>
-    <p>Groupes de moins de {data.threshold} demandes masqués. Le quartier de résidence est déclaré librement par l’usager.</p>
-    <dl className="grid grid-cols-2 md:grid-cols-4 gap-3">{outcomes.map(([label, value]) =>
-      <div className="bg-surface p-3 rounded-btn" key={label}><dt>{label}</dt><dd className="text-xl font-bold">{value ?? '—'}</dd></div>)}</dl>
-    {!!data.monthly.length && <div className="h-56" aria-hidden="true">
-      <ResponsiveContainer width="100%" height="100%"><BarChart data={data.monthly}>
-        <CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="month" /><YAxis allowDecimals={false} />
-        <Tooltip /><Bar dataKey="volume" name="Demandes" fill="#176B57" />
-      </BarChart></ResponsiveContainer>
-    </div>}
-    <h3 className="font-bold">Demandes par mois</h3>
-    <ul>{data.monthly.map((item) => <li key={item.month}>{item.month} · {item.volume}</li>)}</ul>
-    <h3 className="font-bold">Quartier de résidence déclaré</h3>
-    {!data.residentDistricts.length && <p>Aucun groupe affichable.</p>}
-    <ul>{data.residentDistricts.map((item) => <li key={item.district}>{item.district}{item.qpv && ' (QPV)'} · {item.volume}</li>)}</ul>
-    <h3 className="font-bold">Délai moyen par thème</h3>
-    <ul>{data.waitByTheme.map((item) => <li key={item.theme}>{themes[item.theme] ?? item.theme} · {item.waitDays} jours ({item.volume} demandes)</li>)}</ul>
-    <h3 className="font-bold">Saturation des structures à 30 jours</h3>
-    {!data.saturationByAssociation.length && <p>Aucune structure avec assez de créneaux.</p>}
-    <ul>{data.saturationByAssociation.map((item) => <li key={item.association}>{item.association} · {item.rate} % ({item.reserved}/{item.slots})</li>)}</ul>
-    <details className="space-y-2"><summary className="font-semibold">Quartiers proposés aux usagers</summary>
-      <ActionForm label="Enregistrer le quartier" reset onSubmit={(form) => save('save_district', {
-        name: String(form.get('name')).trim(), city: String(form.get('city') ?? '').trim(), qpv: form.has('qpv'),
-      })}>
-        <Value label="Nom du quartier" name="name" /><Value label="Commune" name="city" required={false} />
-        <label className="flex gap-2"><input type="checkbox" name="qpv" /> Quartier prioritaire de la ville (QPV)</label>
-      </ActionForm>
-      <ul>{data.districts.map((item) => <li key={item.name} className="flex flex-wrap items-center gap-2">
-        <span>{item.name}{item.city && `, ${item.city}`}{item.qpv && ' (QPV)'}</span>
-        <ActionForm label="Retirer" onSubmit={() => save('remove_district', { name: item.name })} />
-      </li>)}</ul>
-    </details>
+    <h2 className="text-xl font-bold">Quartiers proposés aux usagers</h2>
+    <p>Ces quartiers sont suggérés lors de la réservation et alimentent la carte des QPV du baromètre.</p>
+    <ActionForm label="Enregistrer le quartier" reset onSubmit={(form) => save('save_district', {
+      name: String(form.get('name')).trim(), city: String(form.get('city') ?? '').trim(), qpv: form.has('qpv'),
+    })}>
+      <div className="grid sm:grid-cols-2 gap-3"><Value label="Nom du quartier" name="name" /><Value label="Commune" name="city" required={false} /></div>
+      <label className="flex gap-2"><input type="checkbox" name="qpv" /> Quartier prioritaire de la ville (QPV)</label>
+    </ActionForm>
+    {!data.districts.length && <p>Aucun quartier enregistré.</p>}
+    <ul className="flex flex-wrap gap-2">{data.districts.map((item) => <li key={item.name} className="flex items-center gap-2 border border-border rounded-btn pl-3">
+      <span>{item.name}{item.city && `, ${item.city}`}{item.qpv && ' · QPV'}</span>
+      <ActionForm label="Retirer" onSubmit={() => save('remove_district', { name: item.name })} />
+    </li>)}</ul>
   </section>;
 }
 
@@ -209,29 +188,6 @@ function HelpCenterForm({ item, save }: { item?: DigitalHelpCenter; save: (value
   </ActionForm>;
 }
 
-function Statistics({ stats }: { stats: Stats }) {
-  const metrics = [['Demandes', stats.total], ['Rendez-vous effectués', stats.completed],
-    ['Délai moyen en jours', stats.waitDays], ['Saturation à 30 jours (%)', stats.saturation]] as const;
-  const series = stats.themes.map((item) => ({ ...item, name: themes[item.theme] }));
-  return <section className={panel}>
-    <h2 className="text-xl font-bold">Indicateurs territoriaux</h2>
-    <p>Les groupes de moins de cinq demandes ne sont pas affichés.</p>
-    <dl className="grid grid-cols-2 md:grid-cols-4 gap-3">{metrics.map(([label, value]) =>
-      <div className="bg-surface p-3 rounded-btn" key={label}><dt>{label}</dt><dd className="text-xl font-bold">{value ?? '—'}</dd></div>)}</dl>
-    {!!series.length && <div className="h-64" aria-hidden="true">
-      <ResponsiveContainer width="100%" height="100%"><BarChart data={series}>
-        <CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="name" /><YAxis allowDecimals={false} />
-        <Tooltip /><Bar dataKey="volume" name="Demandes" fill="#176B57" />
-      </BarChart></ResponsiveContainer>
-    </div>}
-    <h3 className="font-bold">Par thème</h3>
-    <ul>{series.map((item) => <li key={item.theme}>{item.name} · {item.volume}</li>)}</ul>
-    <h3 className="font-bold">Par quartier</h3>
-    {!stats.districts.length && <p>Aucun groupe affichable.</p>}
-    <ul>{stats.districts.map((item) => <li key={`${item.district}-${item.qpv}`}>{item.district}{item.qpv && ' (QPV)'} · {item.volume}</li>)}</ul>
-  </section>;
-}
-
 function AdminView() {
   const { reloadDirectory } = usePortal();
   const { data, error, refresh } = useDashboard(loadAdmin);
@@ -269,8 +225,9 @@ function AdminView() {
   if (!data) return <p role="status">Chargement de l’observatoire…</p>;
   return <>
     <p role="status" className="font-semibold">{notice}</p>
-    <Statistics stats={data.stats} />
-    <DetailedStatistics />
+    <ObservatoryDashboard stats={data.stats} published={data.associations.filter((item) => item.published).length}
+      pending={data.applications.length} />
+    <DistrictsManager />
     <section className={panel}><h2 className="text-xl font-bold">Demandes de référencement</h2>
       {!data.applications.length && <p>Aucune demande en attente.</p>}
       {data.applications.map((item) => <details key={item.id} className="border p-3 rounded-btn space-y-2">
