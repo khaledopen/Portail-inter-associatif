@@ -24,9 +24,12 @@ function convert(row: DirectoryRow): Association {
   const lastDay = new Date(now.getTime() + (6 - days.indexOf(weekday.format(now))) * 86400000);
   return {
     shortName: row.name, quartier: '', address: '', city: '', taoStop: '', taoLine: '',
-    phone: '', hours: '', publicAccueilli: '', mission: '', falcSummary: '', languagesSpoken: [],
+    phone: '', hours: '', publicAccueilli: '', mission: '', falcSummary: '',
     distanceKm: 0, saturationRate: 0,
     ...row,
+    languagesSpoken: Array.isArray(row.languagesSpoken) ? row.languagesSpoken : [],
+    secondaryCategories: Array.isArray(row.secondaryCategories) ? row.secondaryCategories : [],
+    procedures: Array.isArray(row.procedures) ? row.procedures : [],
     documentsRequired: {
       firstVisit: row.documentsRequired?.firstVisit ?? [],
       followUp: row.documentsRequired?.followUp ?? [],
