@@ -179,13 +179,13 @@ function EditAssociation({ draft, save }: { draft?: Draft; save: (values: Record
     </select></label>
     <fieldset className="flex flex-wrap gap-3"><legend>Compétences complémentaires</legend>
       {Object.entries(themes).map(([id, name]) => <label key={id} className="flex gap-1">
-        <input type="checkbox" name="secondary" value={id} defaultChecked={profile?.secondaryCategories?.includes(id as CategoryId)} />{name}
+        <input type="checkbox" name="secondary" value={id} defaultChecked={(profile?.secondaryCategories ?? []).includes(id as CategoryId)} />{name}
       </label>)}
     </fieldset>
     <TextBox label="Missions" name="mission" initial={profile?.mission} />
     <label className="block">Langues parlées, une par ligne<textarea name="languages" className={field} defaultValue={profile?.languagesSpoken?.join('\n')} /></label>
-    <label className="block">Documents du premier rendez-vous, un par ligne<textarea name="first" className={field} defaultValue={profile?.documentsRequired?.firstVisit.join('\n')} /></label>
-    <label className="block">Documents de suivi, un par ligne<textarea name="follow" className={field} defaultValue={profile?.documentsRequired?.followUp.join('\n')} /></label>
+    <label className="block">Documents du premier rendez-vous, un par ligne<textarea name="first" className={field} defaultValue={profile?.documentsRequired?.firstVisit?.join('\n')} /></label>
+    <label className="block">Documents de suivi, un par ligne<textarea name="follow" className={field} defaultValue={profile?.documentsRequired?.followUp?.join('\n')} /></label>
     <details className="space-y-2"><summary>Démarches et checklists par langue</summary>
       <label className="block">Catalogue JSON
         <textarea name="procedures" className={field} rows={6} defaultValue={JSON.stringify(profile?.procedures ?? [], null, 2)} />
