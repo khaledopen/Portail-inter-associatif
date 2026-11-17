@@ -2,10 +2,19 @@ export type CategoryId = 'papiers' | 'logement' | 'sante' | 'travail' | 'famille
 
 export interface TimeSlot {
   id: string;
+  startsAt?: string;
+  motif?: 'firstVisit' | 'followUp' | 'both';
   dayLabel: string;
   dateIso: string;
   time: string;
   available: boolean;
+}
+
+export interface Procedure {
+  code: string;
+  title: string;
+  description?: string;
+  documents: Partial<Record<string, string[]>>;
 }
 
 export interface Association {
@@ -26,6 +35,7 @@ export interface Association {
   hours: string;
   publicAccueilli: string;
   mission: string;
+  procedures?: Procedure[];
   falcSummary: string;
   hasSlotThisWeek: boolean;
   saturationRate: number;
